@@ -41,13 +41,32 @@
   gap: 12px;
 }
 
-.sample-badge {
+.source-badge {
   font-size: 12px;
-  color: var(--warning);
-  border: 1px solid var(--warning);
   border-radius: 999px;
   padding: 4px 10px;
+}
+
+.source-badge.source-sample {
+  color: var(--warning);
+  border: 1px solid var(--warning);
   opacity: 0.85;
+}
+
+.source-badge.source-live {
+  color: var(--accent-2);
+  border: 1px solid var(--accent-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.source-badge.source-live::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-2);
 }
 
 /* Buttons */

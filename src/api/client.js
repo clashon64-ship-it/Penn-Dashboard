@@ -1,9 +1,13 @@
 import { sampleData } from './sampleData'
+import { usingGoogleSheets, fetchFromGoogleSheets } from './googleSheets'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || ''
 const TOKEN = import.meta.env.VITE_API_TOKEN || ''
 
-export const usingSampleData = !BASE_URL
+// Resolve the active data source once. Google Sheets takes precedence, then a
+// generic REST API, then the built-in sample data.
+export const dataSource = usingGoogleSheets ? 'sheets' : BASE_URL ? 'api' : 'sample'
+export const usingSampleData = dataSource === 'sample'
 
 function authHeaders() {
   const headers = { Accept: 'application/json' }
@@ -25,15 +29,17 @@ function delay(value, ms = 400) {
 }
 
 /**
- * Fetch the full dashboard payload.
+ * Fetch the full dashboard payload from the active data source.
  *
- * When VITE_API_BASE_URL is set, this expects a single `/dashboard` endpoint
- * returning { kpis, timeseries, categories, transactions }. Swap the endpoint
- * shape here to match your real API without touching the components.
+ * - `sheets`: reads from a Google Spreadsheet (see api/googleSheets.js)
+ * - `api`: expects a `GET /dashboard` endpoint at VITE_API_BASE_URL
+ * - `sample`: returns the built-in dataset
+ *
+ * All paths resolve to the same { kpis, timeseries, categories, transactions }
+ * shape, so the components never need to know where the data came from.
  */
 export async function fetchDashboard() {
-  if (usingSampleData) {
-    return delay(sampleData)
-  }
-  return request('/dashboard')
+  if (dataSource === 'sheets') return fetchFromGoogleSheets()
+  if (dataSource === 'api') return request('/dashboard')
+  return delay(sampleData)
 }

@@ -1,5 +1,5 @@
 import { useDashboard } from './hooks/useDashboard'
-import { usingSampleData } from './api/client'
+import { dataSource } from './api/client'
 import { KpiCard } from './components/KpiCard'
 import { RevenueChart } from './components/RevenueChart'
 import { CategoryChart } from './components/CategoryChart'
@@ -20,11 +20,7 @@ export default function App() {
           </div>
         </div>
         <div className="header-actions">
-          {usingSampleData && (
-            <span className="sample-badge" title="Set VITE_API_BASE_URL to use live data">
-              Sample data
-            </span>
-          )}
+          <SourceBadge source={dataSource} />
           <button className="btn" onClick={refetch} disabled={loading}>
             {loading ? 'Refreshing…' : 'Refresh'}
           </button>
@@ -67,6 +63,25 @@ export default function App() {
         <span>Penn Dashboard · {new Date().getFullYear()}</span>
       </footer>
     </div>
+  )
+}
+
+const SOURCE_META = {
+  sheets: { label: 'Live · Google Sheets', className: 'source-live' },
+  api: { label: 'Live · API', className: 'source-live' },
+  sample: {
+    label: 'Sample data',
+    className: 'source-sample',
+    title: 'Set VITE_GOOGLE_SHEET_ID + VITE_GOOGLE_API_KEY to use live data',
+  },
+}
+
+function SourceBadge({ source }) {
+  const meta = SOURCE_META[source] || SOURCE_META.sample
+  return (
+    <span className={`source-badge ${meta.className}`} title={meta.title}>
+      {meta.label}
+    </span>
   )
 }
 
