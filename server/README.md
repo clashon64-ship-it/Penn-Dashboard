@@ -1,9 +1,16 @@
-# Penn Dashboard — Backend Proxy
+# Penn Dashboard — Backend Proxy (optional / standalone)
+
+> **When to use this:** the primary deployment is the Vercel serverless function
+> at [`api/dashboard.js`](../api/dashboard.js) — see the root
+> [`README.md`](../README.md#deploying-to-vercel-live-data). This standalone
+> Express server is an **alternative** for local testing or non-Vercel hosts. It
+> shares the same sheet-reading core ([`api/_sheet.js`](../api/_sheet.js)), so
+> the two never drift.
 
 A small Express server that reads the private Google Sheet using a **Google
 service account** and serves normalized contacts to the dashboard. The sheet
 stays private — the credentials live here, server-side, and never reach the
-browser.
+browser. No Zapier: it calls the Google Sheets API directly.
 
 ```
 Private Google Sheet  ──(service account, read-only)──►  this proxy  ──►  GET /dashboard  ──►  React app
@@ -45,7 +52,7 @@ in the project root `.env`.
 ## Sheet mapping
 
 Columns `A:S` of `Sheet1` map to the contact fields in order (see the `COLUMNS`
-array in `index.js`):
+array in [`../api/_sheet.js`](../api/_sheet.js)):
 
 | Col | Field            | Col | Field             |
 | --- | ---------------- | --- | ----------------- |
@@ -60,13 +67,13 @@ array in `index.js`):
 | I   | linkedinUrl      | S   | humanReviewNeeded |
 | J   | source           |     |                   |
 
-\* parsed as numbers. If your column order changes, update `COLUMNS` and
+\* parsed as numbers. If your column order changes, update `COLUMNS` (in
+`../api/_sheet.js`) and
 `SHEET_RANGE`.
 
 ## Deploying
 
 Any Node host works (Railway, Render, Fly, a small VM). Set the same env vars
-there, and provide the service-account JSON (most hosts let you store it as a
-secret file or as a `GOOGLE_APPLICATION_CREDENTIALS` JSON string — adjust the
-auth in `index.js` if you pass the JSON inline rather than as a file path).
-Set `ALLOWED_ORIGIN` to your deployed frontend's URL.
+there. For hosts without a writable filesystem, set `GOOGLE_CREDENTIALS_JSON` to
+the full service-account JSON instead of a file path — `api/_sheet.js` handles
+both. Set `ALLOWED_ORIGIN` to your deployed frontend's URL.

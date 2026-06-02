@@ -18,8 +18,8 @@ module.exports = {
   },
   overrides: [
     {
-      // Backend proxy runs on Node, not in the browser.
-      files: ['server/**/*.js'],
+      // Backend code (serverless functions + standalone proxy) runs on Node.
+      files: ['server/**/*.js', 'api/**/*.js'],
       env: { node: true, browser: false },
       extends: ['eslint:recommended'],
     },

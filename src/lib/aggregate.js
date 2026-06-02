@@ -1,6 +1,10 @@
 // Derives the dashboard view model from a flat list of contacts. All metrics
 // the UI shows are computed here, so the data source only has to return raw
 // contacts and never needs to know about charts or KPIs.
+//
+// This is the OUTREACH domain builder. Each additional business domain (e.g.
+// expenses) gets its own builder here (buildExpensesModel(...)) consuming its
+// own raw dataset — see README "Adding a business section".
 
 function isYes(value) {
   return String(value || '').trim().toLowerCase().startsWith('yes')
