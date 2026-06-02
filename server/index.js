@@ -41,12 +41,22 @@ function rowToContact(row) {
   return contact
 }
 
-// Auth via a service account. Credentials are resolved from
-// GOOGLE_APPLICATION_CREDENTIALS (a path to the JSON key file) using the
-// default GoogleAuth mechanism — nothing secret ships to the browser.
-const auth = new google.auth.GoogleAuth({
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-})
+// Auth via a service account. Two supported credential sources:
+//   - GOOGLE_CREDENTIALS_JSON: the full service-account JSON inline (best for
+//     hosted/serverless — store it as a secret env var, no file on disk).
+//   - GOOGLE_APPLICATION_CREDENTIALS: a path to the JSON key file (best for
+//     local dev). This is the GoogleAuth default when the var above is unset.
+// Either way, nothing secret ships to the browser.
+function buildAuth() {
+  const scopes = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+  if (process.env.GOOGLE_CREDENTIALS_JSON) {
+    const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON)
+    return new google.auth.GoogleAuth({ credentials, scopes })
+  }
+  return new google.auth.GoogleAuth({ scopes })
+}
+
+const auth = buildAuth()
 
 let cache = { at: 0, contacts: null }
 
