@@ -183,6 +183,22 @@
   font-weight: 400;
 }
 
+.kpi-hint {
+  font-size: 13px;
+}
+
+.kpi-hint.tone-muted {
+  color: var(--text-muted);
+}
+
+.kpi-hint.tone-warning {
+  color: var(--warning);
+}
+
+.kpi-hint.tone-positive {
+  color: var(--accent-2);
+}
+
 /* Charts */
 .chart-card {
   display: flex;
@@ -210,6 +226,73 @@
   width: 10px;
   height: 10px;
   border-radius: 3px;
+}
+
+.legend-value {
+  color: var(--text);
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 24px 0;
+  text-align: center;
+}
+
+/* Table header + search */
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.table-header .card-title {
+  margin-bottom: 0;
+}
+
+.search {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 14px;
+  min-width: 240px;
+}
+
+.search:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* Placeholder section (e.g. Expenses, pending a data source) */
+.placeholder-card {
+  border-style: dashed;
+}
+
+.placeholder-text {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 70ch;
+}
+
+.placeholder-text code {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 13px;
+  color: var(--text);
 }
 
 /* Table */
@@ -258,22 +341,52 @@
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 12px;
-  text-transform: capitalize;
+  white-space: nowrap;
 }
 
-.badge-paid {
-  background: rgba(52, 211, 153, 0.15);
-  color: var(--accent-2);
+.badge-new {
+  background: rgba(79, 140, 255, 0.15);
+  color: var(--accent);
 }
 
-.badge-pending {
+.badge-contacted {
   background: rgba(251, 191, 36, 0.15);
   color: var(--warning);
 }
 
-.badge-failed {
+.badge-replied {
+  background: rgba(167, 139, 250, 0.18);
+  color: #c4b5fd;
+}
+
+.badge-booked {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-2);
+}
+
+.badge-cold {
   background: rgba(248, 113, 113, 0.15);
   color: var(--danger);
+}
+
+.badge-neutral {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+}
+
+/* Contact score colors */
+.score-high {
+  color: var(--accent-2);
+  font-weight: 600;
+}
+.score-mid {
+  color: var(--warning);
+}
+.score-low {
+  color: var(--danger);
+}
+.score-none {
+  color: var(--text-muted);
 }
 
 /* Banner */

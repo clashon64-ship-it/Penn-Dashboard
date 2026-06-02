@@ -27,3 +27,8 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Secrets — never commit service-account credentials
+server/service-account.json
+**/service-account*.json
+*-credentials.json

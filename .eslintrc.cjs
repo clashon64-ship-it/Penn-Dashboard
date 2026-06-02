@@ -16,4 +16,12 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      // Backend proxy runs on Node, not in the browser.
+      files: ['server/**/*.js'],
+      env: { node: true, browser: false },
+      extends: ['eslint:recommended'],
+    },
+  ],
 }

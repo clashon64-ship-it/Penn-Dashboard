@@ -1,13 +1,12 @@
 import { useDashboard } from './hooks/useDashboard'
 import { dataSource } from './api/client'
 import { KpiCard } from './components/KpiCard'
-import { RevenueChart } from './components/RevenueChart'
-import { CategoryChart } from './components/CategoryChart'
-import { TransactionsTable } from './components/TransactionsTable'
+import { BreakdownChart } from './components/BreakdownChart'
+import { ContactsTable } from './components/ContactsTable'
 import './App.css'
 
 export default function App() {
-  const { data, loading, error, refetch } = useDashboard()
+  const { model, loading, error, refetch } = useDashboard()
 
   return (
     <div className="app">
@@ -16,7 +15,7 @@ export default function App() {
           <span className="brand-mark" />
           <div>
             <h1>Penn Dashboard</h1>
-            <p className="subtitle">Business analytics overview</p>
+            <p className="subtitle">The Penn Enterprises · Outreach overview</p>
           </div>
         </div>
         <div className="header-actions">
@@ -37,24 +36,26 @@ export default function App() {
           </div>
         )}
 
-        {loading && !data && <LoadingState />}
+        {loading && !model && <LoadingState />}
 
-        {data && (
+        {model && (
           <>
             <section className="kpi-grid">
-              {data.kpis.map((kpi) => (
+              {model.kpis.map((kpi) => (
                 <KpiCard key={kpi.id} kpi={kpi} />
               ))}
             </section>
 
             <section className="charts-grid">
-              <RevenueChart data={data.timeseries} />
-              <CategoryChart data={data.categories} />
+              <BreakdownChart title="Outreach Status" data={model.statusBreakdown} />
+              <BreakdownChart title="Leads by Source" data={model.sourceBreakdown} />
             </section>
 
             <section>
-              <TransactionsTable transactions={data.transactions} />
+              <ContactsTable contacts={model.contacts} />
             </section>
+
+            <ExpensesPlaceholder />
           </>
         )}
       </main>
@@ -67,12 +68,11 @@ export default function App() {
 }
 
 const SOURCE_META = {
-  sheets: { label: 'Live · Google Sheets', className: 'source-live' },
-  api: { label: 'Live · API', className: 'source-live' },
+  api: { label: 'Live · Proxy', className: 'source-live' },
   sample: {
     label: 'Sample data',
     className: 'source-sample',
-    title: 'Set VITE_GOOGLE_SHEET_ID + VITE_GOOGLE_API_KEY to use live data',
+    title: 'Set VITE_API_BASE_URL to your backend proxy to use live data',
   },
 }
 
@@ -82,6 +82,21 @@ function SourceBadge({ source }) {
     <span className={`source-badge ${meta.className}`} title={meta.title}>
       {meta.label}
     </span>
+  )
+}
+
+function ExpensesPlaceholder() {
+  return (
+    <section className="card placeholder-card">
+      <h3 className="card-title">Expenses</h3>
+      <p className="placeholder-text">
+        No expense data found in the connected sheet yet. To light this section
+        up, add an <code>Expenses</code> tab with columns like{' '}
+        <code>date</code>, <code>category</code>, <code>vendor</code>, and{' '}
+        <code>amount</code> — then it’ll show spend over time and a category
+        breakdown here.
+      </p>
+    </section>
   )
 }
 
