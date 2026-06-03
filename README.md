@@ -8,6 +8,16 @@ searchable contact list.
 Expense tracking is stubbed and lights up once an `Expenses` tab is added to
 the sheet.
 
+## Website video updates
+
+Use [`docs/website-video-update-playbook.md`](docs/website-video-update-playbook.md)
+as the starter guide for adding videos of current Penn Enterprises work,
+automations, dashboards, and shipped systems to the public website.
+
+The guide explains the GitHub workflow, where videos should live, the portfolio
+metadata shape, and what receipts are required before calling a website update
+complete.
+
 ## Architecture
 
 The Google Sheet is **private**. A serverless proxy holds the Google
