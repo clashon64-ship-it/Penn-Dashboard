@@ -1,87 +1,140 @@
-// Built-in sample dataset. Used when VITE_API_BASE_URL is not configured so the
-// dashboard renders immediately during development. The shape here is the
-// contract the rest of the app expects an external API to return.
+// Built-in sample dataset.
+//
+// IMPORTANT: this is fictional data that mirrors the *shape* of the outreach
+// sheet (med-spa cold-outreach CRM). Real prospect data never lives in the
+// repo — it is served only at runtime through the private backend proxy.
+//
+// Each record matches the normalized contact shape produced by the proxy
+// (see server/index.js) and consumed by src/lib/aggregate.js.
 
-const MONTHS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+export const sampleContacts = [
+  {
+    firstName: 'Gina', lastName: 'Avery', email: 'gina@example-medspa.com',
+    company: 'Coastline Aesthetics', title: 'Owner / Nurse Practitioner',
+    industry: 'Med Spa / Aesthetics', employeeCount: 8,
+    location: 'San Diego (Carmel Valley), CA', linkedinUrl: '',
+    source: 'ICP Research – SD Med Spa', outreachStatus: 'New Client',
+    dateSent: '', emailSubject: '', notes: 'Single-location, owner-operated. Closed weekends.',
+    phone: '(858) 555-0108', emailConfidence: 'High', contactScore: 91,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Marcus', lastName: 'Bell', email: 'marcus@example-medspa.com',
+    company: 'La Mesa Skin & Laser', title: 'Owner / Medical Director (MD)',
+    industry: 'Med Spa / Aesthetics', employeeCount: 14,
+    location: 'La Mesa, CA', linkedinUrl: '',
+    source: 'ICP Research – SD Med Spa', outreachStatus: 'Contacted',
+    dateSent: '2026-05-21', emailSubject: 'Quick question about after-hours bookings',
+    notes: 'Running first-visit promos, limited hours.',
+    phone: '(619) 555-0119', emailConfidence: 'High', contactScore: 88,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Priya', lastName: 'Chandra', email: 'priya@example-medspa.com',
+    company: 'Hillcrest Aesthetica', title: 'Owner / Medical Director (MD)',
+    industry: 'Med Spa / Aesthetics', employeeCount: 11,
+    location: 'San Diego (Hillcrest), CA', linkedinUrl: '',
+    source: 'LinkedIn Outreach', outreachStatus: 'Replied',
+    dateSent: '2026-05-18', emailSubject: 'After-hours missed-call capture',
+    notes: 'Booking via Vagaro. Interested, asked for pricing.',
+    phone: '(619) 555-0143', emailConfidence: 'Medium', contactScore: 76,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Daniel', lastName: 'Ortiz', email: 'daniel@example-medspa.com',
+    company: 'South Bay Boutique Med Spa', title: 'Co-Owner',
+    industry: 'Med Spa / Aesthetics', employeeCount: 6,
+    location: 'Chula Vista, CA', linkedinUrl: '',
+    source: 'LinkedIn Outreach', outreachStatus: 'Booked',
+    dateSent: '2026-05-12', emailSubject: 'Demo follow-up',
+    notes: 'Clinical owners, ops likely manual. Demo booked for next week.',
+    phone: '(619) 555-0188', emailConfidence: 'High', contactScore: 94,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Renee', lastName: 'Park', email: 'renee@example-medspa.com',
+    company: 'BroTox City Heights', title: 'Owner / Nurse Injector',
+    industry: 'Med Spa / Aesthetics', employeeCount: 4,
+    location: 'San Diego (City Heights), CA', linkedinUrl: '',
+    source: 'ICP Research – SD Med Spa', outreachStatus: 'Contacted',
+    dateSent: '2026-05-22', emailSubject: 'Your IG DMs are piling up',
+    notes: 'Solo-injector model, growing brand. Confirm owner name.',
+    phone: '(858) 555-0162', emailConfidence: 'Low', contactScore: 64,
+    humanReviewNeeded: 'Yes',
+  },
+  {
+    firstName: 'Tom', lastName: 'Whitfield', email: 'tom@example-medspa.com',
+    company: 'Del Mar Rejuvenation', title: 'Practice Manager',
+    industry: 'Med Spa / Aesthetics', employeeCount: 22,
+    location: 'Del Mar, CA', linkedinUrl: '',
+    source: 'Referral', outreachStatus: 'New Client',
+    dateSent: '', emailSubject: '', notes: 'Referred by existing contact.',
+    phone: '(858) 555-0177', emailConfidence: 'High', contactScore: 82,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Alyssa', lastName: 'Reed', email: 'alyssa@example-medspa.com',
+    company: 'Pacific Beach Glow Bar', title: 'Owner',
+    industry: 'Med Spa / Aesthetics', employeeCount: 5,
+    location: 'San Diego (Pacific Beach), CA', linkedinUrl: '',
+    source: 'Cold Email', outreachStatus: 'Not Interested',
+    dateSent: '2026-05-09', emailSubject: 'Missed bookings after hours?',
+    notes: 'Replied not interested — already has a solution.',
+    phone: '(858) 555-0193', emailConfidence: 'Medium', contactScore: 41,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Victor', lastName: 'Nguyen', email: 'victor@example-medspa.com',
+    company: 'Eastlake Aesthetics', title: 'Owner / Medical Director (MD)',
+    industry: 'Med Spa / Aesthetics', employeeCount: 9,
+    location: 'Chula Vista (Eastlake), CA', linkedinUrl: '',
+    source: 'ICP Research – SD Med Spa', outreachStatus: 'Contacted',
+    dateSent: '2026-05-25', emailSubject: 'Weekend Botox inquiries',
+    notes: 'Closed Sun. Weekend inquiries hit voicemail.',
+    phone: '(619) 555-0204', emailConfidence: 'High', contactScore: 79,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Sofia', lastName: 'Marin', email: 'sofia@example-medspa.com',
+    company: 'North County Skin Studio', title: 'Owner',
+    industry: 'Med Spa / Aesthetics', employeeCount: 7,
+    location: 'Escondido, CA', linkedinUrl: '',
+    source: 'Cold Email', outreachStatus: 'Bounced',
+    dateSent: '2026-05-14', emailSubject: 'Quick question',
+    notes: 'Email bounced — needs a verified address.',
+    phone: '', emailConfidence: 'Low', contactScore: 0,
+    humanReviewNeeded: 'Yes',
+  },
+  {
+    firstName: 'Henry', lastName: 'Cole', email: 'henry@example-medspa.com',
+    company: 'Gaslamp Med Aesthetics', title: 'Owner / Medical Director (MD)',
+    industry: 'Med Spa / Aesthetics', employeeCount: 18,
+    location: 'San Diego (Downtown), CA', linkedinUrl: '',
+    source: 'Referral', outreachStatus: 'Replied',
+    dateSent: '2026-05-19', emailSubject: 'Front-desk follow-up gaps',
+    notes: 'Asked for a one-pager. Warm.',
+    phone: '(619) 555-0216', emailConfidence: 'High', contactScore: 86,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Kayla', lastName: 'Stone', email: 'kayla@example-medspa.com',
+    company: 'Encinitas Wellness & Aesthetics', title: 'Owner / Nurse Practitioner',
+    industry: 'Med Spa / Aesthetics', employeeCount: 10,
+    location: 'Encinitas, CA', linkedinUrl: '',
+    source: 'LinkedIn Outreach', outreachStatus: 'New Client',
+    dateSent: '', emailSubject: '', notes: 'Strong reviews, active ad spend.',
+    phone: '(760) 555-0231', emailConfidence: 'Medium', contactScore: 73,
+    humanReviewNeeded: 'No',
+  },
+  {
+    firstName: 'Brandon', lastName: 'Lee', email: 'brandon@example-medspa.com',
+    company: 'Mission Valley Laser Lounge', title: 'Co-Owner',
+    industry: 'Med Spa / Aesthetics', employeeCount: 13,
+    location: 'San Diego (Mission Valley), CA', linkedinUrl: '',
+    source: 'ICP Research – SD Med Spa', outreachStatus: 'Booked',
+    dateSent: '2026-05-16', emailSubject: 'Demo confirmed',
+    notes: 'Demo confirmed. High intent.',
+    phone: '(619) 555-0247', emailConfidence: 'High', contactScore: 96,
+    humanReviewNeeded: 'No',
+  },
 ]
-
-function buildTimeseries() {
-  let revenue = 420000
-  let expenses = 310000
-  return MONTHS.map((month) => {
-    revenue += Math.round((Math.random() - 0.35) * 60000)
-    expenses += Math.round((Math.random() - 0.45) * 40000)
-    revenue = Math.max(revenue, 200000)
-    expenses = Math.max(expenses, 150000)
-    return {
-      month,
-      revenue,
-      expenses,
-      profit: revenue - expenses,
-    }
-  })
-}
-
-const timeseries = buildTimeseries()
-const totalRevenue = timeseries.reduce((sum, p) => sum + p.revenue, 0)
-const totalProfit = timeseries.reduce((sum, p) => sum + p.profit, 0)
-const last = timeseries[timeseries.length - 1]
-const prev = timeseries[timeseries.length - 2]
-
-function pctChange(current, previous) {
-  if (!previous) return 0
-  return Number((((current - previous) / previous) * 100).toFixed(1))
-}
-
-export const sampleData = {
-  kpis: [
-    {
-      id: 'revenue',
-      label: 'Total Revenue',
-      value: totalRevenue,
-      format: 'currency',
-      change: pctChange(last.revenue, prev.revenue),
-    },
-    {
-      id: 'profit',
-      label: 'Net Profit',
-      value: totalProfit,
-      format: 'currency',
-      change: pctChange(last.profit, prev.profit),
-    },
-    {
-      id: 'margin',
-      label: 'Profit Margin',
-      value: Number(((totalProfit / totalRevenue) * 100).toFixed(1)),
-      format: 'percent',
-      change: pctChange(
-        last.profit / last.revenue,
-        prev.profit / prev.revenue,
-      ),
-    },
-    {
-      id: 'customers',
-      label: 'Active Customers',
-      value: 1284,
-      format: 'number',
-      change: 4.2,
-    },
-  ],
-  timeseries,
-  categories: [
-    { name: 'Enterprise', value: 1240000 },
-    { name: 'Mid-Market', value: 860000 },
-    { name: 'SMB', value: 540000 },
-    { name: 'Self-Serve', value: 320000 },
-  ],
-  transactions: [
-    { id: 'TX-10428', customer: 'Northwind Capital', amount: 84200, status: 'paid', date: '2026-05-28' },
-    { id: 'TX-10427', customer: 'Sterling & Co', amount: 41750, status: 'pending', date: '2026-05-27' },
-    { id: 'TX-10426', customer: 'Atlas Ventures', amount: 128900, status: 'paid', date: '2026-05-26' },
-    { id: 'TX-10425', customer: 'Birch Holdings', amount: 19400, status: 'failed', date: '2026-05-25' },
-    { id: 'TX-10424', customer: 'Cedar Group', amount: 67300, status: 'paid', date: '2026-05-24' },
-    { id: 'TX-10423', customer: 'Dahlia Partners', amount: 53850, status: 'pending', date: '2026-05-23' },
-  ],
-}

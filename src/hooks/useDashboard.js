@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
-import { fetchDashboard } from '../api/client'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { fetchContacts } from '../api/client'
+import { buildViewModel } from '../lib/aggregate'
 
 /**
- * Loads the dashboard payload and exposes loading/error/refetch state.
+ * Loads contacts from the active data source and derives the dashboard view
+ * model. Exposes loading / error / refetch state.
  */
 export function useDashboard() {
-  const [data, setData] = useState(null)
+  const [contacts, setContacts] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -13,8 +15,8 @@ export function useDashboard() {
     setLoading(true)
     setError(null)
     try {
-      const payload = await fetchDashboard()
-      setData(payload)
+      const data = await fetchContacts()
+      setContacts(data)
     } catch (err) {
       setError(err)
     } finally {
@@ -26,5 +28,10 @@ export function useDashboard() {
     load()
   }, [load])
 
-  return { data, loading, error, refetch: load }
+  const model = useMemo(
+    () => (contacts ? buildViewModel(contacts) : null),
+    [contacts],
+  )
+
+  return { model, loading, error, refetch: load }
 }

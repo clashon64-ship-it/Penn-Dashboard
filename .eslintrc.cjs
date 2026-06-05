@@ -16,4 +16,12 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      // Backend code (serverless functions + standalone proxy) runs on Node.
+      files: ['server/**/*.js', 'api/**/*.js'],
+      env: { node: true, browser: false },
+      extends: ['eslint:recommended'],
+    },
+  ],
 }
