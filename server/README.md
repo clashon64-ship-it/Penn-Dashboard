@@ -44,6 +44,7 @@ npm run dev      # or: npm start
 ```
 
 - `GET /dashboard` → `{ contacts: [...], count, fetchedAt }`
+- `GET /expenses`  → `{ available, expenses: [...], count, fetchedAt }`
 - `GET /health`    → `{ ok: true }`
 
 Then point the frontend at it by setting `VITE_API_BASE_URL=http://localhost:8787`
@@ -70,6 +71,21 @@ array in [`../api/_sheet.js`](../api/_sheet.js)):
 \* parsed as numbers. If your column order changes, update `COLUMNS` (in
 `../api/_sheet.js`) and
 `SHEET_RANGE`.
+
+The finance domain reads `Expenses!A:E` the same way (see `EXPENSE_COLUMNS`
+in [`../api/_expenses.js`](../api/_expenses.js)):
+
+| Col | Field       |
+| --- | ----------- |
+| A   | date        |
+| B   | category    |
+| C   | vendor      |
+| D   | description |
+| E   | amount\*    |
+
+If the sheet has no `Expenses` tab, `GET /expenses` returns
+`{ available: false, expenses: [] }` and the dashboard shows setup
+instructions instead of an error.
 
 ## Deploying
 

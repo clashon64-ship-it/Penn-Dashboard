@@ -273,7 +273,32 @@
   overflow-x: auto;
 }
 
-/* Placeholder section (e.g. Expenses, pending a data source) */
+/* Finance section */
+.finance-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Placeholder section (e.g. a domain pending a data source) */
 .placeholder-card {
   border-style: dashed;
 }

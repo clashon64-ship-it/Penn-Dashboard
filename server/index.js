@@ -6,6 +6,7 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import { loadContacts } from '../api/_sheet.js'
+import { loadExpenses } from '../api/_expenses.js'
 
 const {
   GOOGLE_SHEET_ID,
@@ -31,6 +32,16 @@ app.get('/dashboard', async (_req, res) => {
   } catch (err) {
     console.error('Failed to read sheet:', err.message)
     res.status(502).json({ error: 'Failed to read the Google Sheet', detail: err.message })
+  }
+})
+
+app.get('/expenses', async (_req, res) => {
+  try {
+    const { available, expenses } = await loadExpenses()
+    res.json({ available, expenses, count: expenses.length, fetchedAt: new Date().toISOString() })
+  } catch (err) {
+    console.error('Failed to read Expenses tab:', err.message)
+    res.status(502).json({ error: 'Failed to read the Expenses tab', detail: err.message })
   }
 })
 

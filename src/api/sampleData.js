@@ -1,11 +1,13 @@
-// Built-in sample dataset.
+// Built-in sample datasets.
 //
-// IMPORTANT: this is fictional data that mirrors the *shape* of the outreach
-// sheet (med-spa cold-outreach CRM). Real prospect data never lives in the
-// repo — it is served only at runtime through the private backend proxy.
+// IMPORTANT: this is fictional data that mirrors the *shape* of the real
+// sheet (med-spa cold-outreach CRM + Expenses tab). Real business data never
+// lives in the repo — it is served only at runtime through the private
+// backend proxy.
 //
-// Each record matches the normalized contact shape produced by the proxy
-// (see server/index.js) and consumed by src/lib/aggregate.js.
+// Each record matches the normalized shapes produced by the proxy
+// (see api/_sheet.js and api/_expenses.js) and consumed by
+// src/lib/aggregate.js.
 
 export const sampleContacts = [
   {
@@ -137,4 +139,31 @@ export const sampleContacts = [
     phone: '(619) 555-0247', emailConfidence: 'High', contactScore: 96,
     humanReviewNeeded: 'No',
   },
+]
+
+// Fictional business spend matching the Expenses tab shape
+// (date, category, vendor, description, amount).
+export const sampleExpenses = [
+  { date: '2026-02-03', category: 'Software', vendor: 'Google Workspace', description: 'Email + Drive (2 seats)', amount: 28 },
+  { date: '2026-02-05', category: 'Software', vendor: 'Apollo.io', description: 'Lead database subscription', amount: 99 },
+  { date: '2026-02-11', category: 'Marketing', vendor: 'Canva', description: 'Pro plan — outreach creatives', amount: 15 },
+  { date: '2026-02-18', category: 'Contractors', vendor: 'Upwork', description: 'List-building VA (10 hrs)', amount: 180 },
+  { date: '2026-03-02', category: 'Software', vendor: 'Google Workspace', description: 'Email + Drive (2 seats)', amount: 28 },
+  { date: '2026-03-04', category: 'Software', vendor: 'Apollo.io', description: 'Lead database subscription', amount: 99 },
+  { date: '2026-03-09', category: 'Software', vendor: 'Make.com', description: 'Automation scenarios', amount: 34 },
+  { date: '2026-03-15', category: 'Marketing', vendor: 'Namecheap', description: 'Outreach domains (3)', amount: 42 },
+  { date: '2026-03-21', category: 'Contractors', vendor: 'Upwork', description: 'List-building VA (14 hrs)', amount: 252 },
+  { date: '2026-04-01', category: 'Software', vendor: 'Google Workspace', description: 'Email + Drive (2 seats)', amount: 28 },
+  { date: '2026-04-03', category: 'Software', vendor: 'Apollo.io', description: 'Lead database subscription', amount: 99 },
+  { date: '2026-04-08', category: 'Software', vendor: 'Make.com', description: 'Automation scenarios', amount: 34 },
+  { date: '2026-04-12', category: 'Marketing', vendor: 'Instantly.ai', description: 'Email warm-up + sending', amount: 97 },
+  { date: '2026-04-19', category: 'Travel', vendor: 'Uber', description: 'Client demo — downtown SD', amount: 46 },
+  { date: '2026-04-26', category: 'Contractors', vendor: 'Upwork', description: 'Copywriter — email sequences', amount: 320 },
+  { date: '2026-05-01', category: 'Software', vendor: 'Google Workspace', description: 'Email + Drive (2 seats)', amount: 28 },
+  { date: '2026-05-04', category: 'Software', vendor: 'Apollo.io', description: 'Lead database subscription', amount: 99 },
+  { date: '2026-05-07', category: 'Software', vendor: 'Make.com', description: 'Automation scenarios', amount: 34 },
+  { date: '2026-05-11', category: 'Marketing', vendor: 'Instantly.ai', description: 'Email warm-up + sending', amount: 97 },
+  { date: '2026-05-16', category: 'Meals', vendor: 'Blue Bottle Coffee', description: 'Prospect coffee meeting', amount: 21 },
+  { date: '2026-05-22', category: 'Marketing', vendor: 'Namecheap', description: 'Outreach domain renewals', amount: 28 },
+  { date: '2026-05-28', category: 'Contractors', vendor: 'Upwork', description: 'List-building VA (8 hrs)', amount: 144 },
 ]
