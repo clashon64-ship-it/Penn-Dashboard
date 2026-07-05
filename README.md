@@ -1,12 +1,12 @@
 # Penn Dashboard
 
-An outreach analytics dashboard for **The Penn Enterprises**, built with
-React + Vite. It reads a Google Sheets CRM of cold-outreach prospects (med
-spas) and surfaces pipeline status, lead sources, contact scores, and a
-searchable contact list.
-
-Expense tracking is stubbed and lights up once an `Expenses` tab is added to
-the sheet.
+An outreach + finance analytics dashboard for **The Penn Enterprises**, built
+with React + Vite. It reads a Google Sheets CRM of cold-outreach prospects
+(med spas) and surfaces pipeline status, lead sources, contact scores, and a
+searchable contact list — plus a **Finance** section (spend KPIs, monthly
+trend, category breakdown, transactions) fed by an `Expenses` tab in the same
+sheet. Until that tab exists, the Finance section shows setup instructions
+instead of erroring.
 
 ## Website video updates
 
@@ -26,16 +26,16 @@ sensitive ships to the browser. On Vercel the proxy is co-deployed with the
 frontend, so it lives at the same origin under `/api` (no CORS):
 
 ```
-Private Google Sheet
+Private Google Sheet (Sheet1 = CRM, Expenses = spend)
         │  googleapis service account (read-only)   ← credentials are Vercel env vars
         ▼
-/api/dashboard  (Vercel serverless function — api/dashboard.js)
-        │  { contacts: [...] }   (same origin)
+/api/dashboard + /api/expenses  (Vercel serverless functions)
+        │  { contacts: [...] } / { available, expenses: [...] }   (same origin)
         ▼
-React dashboard  →  src/lib/aggregate.js  →  KPIs, status/source charts, contacts table
+React dashboard  →  src/lib/aggregate.js  →  KPIs, charts, tables (outreach + finance)
 ```
 
-The frontend only ever fetches a flat `contacts` array; all KPIs and charts are
+The frontend only ever fetches flat row arrays; all KPIs and charts are
 derived client-side, so the data source stays simple.
 
 > **No Zapier.** The data path is the Google Sheets API accessed directly via
@@ -75,11 +75,12 @@ The frontend and the `/api` proxy deploy together as one Vercel project.
 **3. Set environment variables** in Vercel → Project → Settings → Environment
 Variables:
 
-| Variable                  | Value                                                    |
-| ------------------------- | -------------------------------------------------------- |
-| `GOOGLE_SHEET_ID`         | the ID from the sheet URL                                |
-| `GOOGLE_CREDENTIALS_JSON` | the **entire** service-account JSON, pasted as one value |
-| `SHEET_RANGE` (optional)  | defaults to `Sheet1!A:S`                                 |
+| Variable                    | Value                                                    |
+| --------------------------- | -------------------------------------------------------- |
+| `GOOGLE_SHEET_ID`           | the ID from the sheet URL                                |
+| `GOOGLE_CREDENTIALS_JSON`   | the **entire** service-account JSON, pasted as one value |
+| `SHEET_RANGE` (optional)    | defaults to `Sheet1!A:S`                                 |
+| `EXPENSES_RANGE` (optional) | defaults to `Expenses!A:E`                               |
 
 **4. Deploy.** Vercel builds on import and auto-deploys on every push. The live
 app calls `/api/dashboard` and the header badge shows **Live · Proxy**.
@@ -99,19 +100,25 @@ Express server in [`server/`](server/README.md), then set
 - **Outreach Status** — pipeline breakdown (New Client / Contacted / Replied / Booked / …)
 - **Leads by Source** — where prospects came from (ICP research, LinkedIn, referral, …)
 - **Contacts** — searchable table with status badges, contact score, and review flag
-- **Expenses** — placeholder until an `Expenses` tab exists in the sheet
+- **Finance** — total / latest-month / average-monthly spend and top category,
+  monthly spend trend, spend-by-category donut, and a searchable transaction
+  list. Reads the `Expenses` tab (`date`, `category`, `vendor`, `description`,
+  `amount` in columns A–E, header row first); shows setup instructions until
+  that tab exists.
 
 ## Sheet mapping
 
-The proxy maps `Sheet1!A:S` to contact fields in column order. The full table is
-in [`server/README.md`](server/README.md#sheet-mapping). To adapt to a changed
-column layout, edit the `COLUMNS` array and `SHEET_RANGE` in `api/_sheet.js`
-(shared by both the serverless function and the standalone server).
+The proxy maps `Sheet1!A:S` to contact fields and `Expenses!A:E` to expense
+fields, both in column order. The full tables are in
+[`server/README.md`](server/README.md#sheet-mapping). To adapt to a changed
+column layout, edit the `COLUMNS` array and `SHEET_RANGE` in `api/_sheet.js`,
+or `EXPENSE_COLUMNS` and `EXPENSES_RANGE` in `api/_expenses.js` (both shared
+by the serverless functions and the standalone server).
 
 ## Adding a business section
 
-The dashboard is built as a hub of business "domains" (outreach today; expenses
-and others later). Each domain is three small, isolated pieces:
+The dashboard is built as a hub of business "domains" (outreach and finance
+today; others later). Each domain is three small, isolated pieces:
 
 1. **Proxy endpoint** — add `api/<domain>.js`, reusing the service-account auth
    and row-mapping patterns from [`api/_sheet.js`](api/_sheet.js) for the
@@ -121,20 +128,23 @@ and others later). Each domain is three small, isolated pieces:
    numbers/series that domain needs.
 3. **Section + fetcher** — add a `fetch<Domain>()` one-liner in
    [`src/api/client.js`](src/api/client.js) (built on `fetchJson`) and a section
-   component, then register it in `App.jsx`. The existing `ExpensesPlaceholder`
-   in `src/App.jsx` shows a section awaiting data.
+   component, then register it in `App.jsx`. The finance domain
+   (`api/expenses.js` → `buildExpensesModel` → `FinanceSection`) is a complete
+   worked example, including graceful "data source not set up yet" handling.
 
 ## Project structure
 
 ```
-api/          Vercel serverless proxy: dashboard.js (handler) + _sheet.js (shared reader)
+api/          Vercel serverless proxy: dashboard.js + expenses.js (handlers),
+              _sheet.js + _expenses.js (shared readers)
 src/
   api/        client.js (proxy/sample + fetchJson), sampleData.js (fictional fallback)
-  lib/        aggregate.js (rows → view model), format.js
-  hooks/      useDashboard
-  components/ KpiCard, BreakdownChart, ContactsTable
+  lib/        aggregate.js (rows → view models: outreach + finance), format.js
+  hooks/      useDashboard, useExpenses
+  components/ KpiCard, BreakdownChart, ContactsTable,
+              FinanceSection, SpendTrendChart, ExpensesTable
   App.jsx     layout + composition
-server/       optional standalone Express proxy (local / non-Vercel), shares api/_sheet.js
+server/       optional standalone Express proxy (local / non-Vercel), shares api/ readers
 vercel.json   Vercel build + SPA-rewrite config
 ```
 

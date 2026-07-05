@@ -1,4 +1,4 @@
-import { sampleContacts } from './sampleData'
+import { sampleContacts, sampleExpenses } from './sampleData'
 
 // The dashboard reads from the backend proxy (a same-origin Vercel serverless
 // function in production, or a local proxy in dev) which holds the Google
@@ -48,4 +48,21 @@ export async function fetchContacts() {
   }
   const body = await fetchJson('/dashboard')
   return body.contacts || []
+}
+
+/**
+ * Finance domain: fetch raw expense rows from the active data source.
+ *
+ * - `api`:    GET {BASE_URL}/expenses  ->  { available, expenses: [...] }
+ * - `sample`: built-in fictional expenses
+ *
+ * `available` is false when the sheet has no Expenses tab yet, letting the
+ * Finance section show its setup placeholder instead of an error.
+ */
+export async function fetchExpenses() {
+  if (dataSource === 'sample') {
+    return delay({ available: true, expenses: sampleExpenses })
+  }
+  const body = await fetchJson('/expenses')
+  return { available: body.available !== false, expenses: body.expenses || [] }
 }

@@ -18,7 +18,7 @@ export const COLUMNS = [
 
 const NUMERIC = new Set(['employeeCount', 'contactScore'])
 
-function toNumber(raw) {
+export function toNumber(raw) {
   if (raw == null || raw === '') return 0
   const n = Number(String(raw).replace(/[$,%\s]/g, ''))
   return Number.isFinite(n) ? n : 0
@@ -38,7 +38,7 @@ function rowToContact(row) {
 //     hosted/serverless — store it as a secret env var, no file on disk).
 //   - GOOGLE_APPLICATION_CREDENTIALS: a path to the JSON key file (local dev).
 let authClient
-function getAuth() {
+export function getAuth() {
   if (authClient) return authClient
   const scopes = ['https://www.googleapis.com/auth/spreadsheets.readonly']
   if (process.env.GOOGLE_CREDENTIALS_JSON) {

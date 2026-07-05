@@ -3,6 +3,7 @@ import { dataSource } from './api/client'
 import { KpiCard } from './components/KpiCard'
 import { BreakdownChart } from './components/BreakdownChart'
 import { ContactsTable } from './components/ContactsTable'
+import { FinanceSection } from './components/FinanceSection'
 import './App.css'
 
 export default function App() {
@@ -55,7 +56,7 @@ export default function App() {
               <ContactsTable contacts={model.contacts} />
             </section>
 
-            <ExpensesPlaceholder />
+            <FinanceSection />
           </>
         )}
       </main>
@@ -82,21 +83,6 @@ function SourceBadge({ source }) {
     <span className={`source-badge ${meta.className}`} title={meta.title}>
       {meta.label}
     </span>
-  )
-}
-
-function ExpensesPlaceholder() {
-  return (
-    <section className="card placeholder-card">
-      <h3 className="card-title">Expenses</h3>
-      <p className="placeholder-text">
-        No expense data found in the connected sheet yet. To light this section
-        up, add an <code>Expenses</code> tab with columns like{' '}
-        <code>date</code>, <code>category</code>, <code>vendor</code>, and{' '}
-        <code>amount</code> — then it’ll show spend over time and a category
-        breakdown here.
-      </p>
-    </section>
   )
 }
 

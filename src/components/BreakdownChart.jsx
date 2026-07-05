@@ -6,10 +6,11 @@ const COLORS = [
 ]
 
 /**
- * Generic donut chart for a [{ name, value }] breakdown. Used for both the
- * outreach-status and lead-source views.
+ * Generic donut chart for a [{ name, value }] breakdown. Used for the
+ * outreach-status, lead-source, and expense-category views. Pass
+ * `valueFormatter` when values aren't plain counts (e.g. currency).
  */
-export function BreakdownChart({ title, data }) {
+export function BreakdownChart({ title, data, valueFormatter = (v) => v }) {
   const total = data.reduce((sum, d) => sum + d.value, 0)
 
   return (
@@ -41,7 +42,7 @@ export function BreakdownChart({ title, data }) {
                   color: '#e6e9ef',
                 }}
                 formatter={(value, name) => [
-                  `${value} (${Math.round((value / total) * 100)}%)`,
+                  `${valueFormatter(value)} (${Math.round((value / total) * 100)}%)`,
                   name,
                 ]}
               />
@@ -55,7 +56,7 @@ export function BreakdownChart({ title, data }) {
                   style={{ background: COLORS[index % COLORS.length] }}
                 />
                 {entry.name}
-                <span className="legend-value">{entry.value}</span>
+                <span className="legend-value">{valueFormatter(entry.value)}</span>
               </li>
             ))}
           </ul>
